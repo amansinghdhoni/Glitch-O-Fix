@@ -1,0 +1,22 @@
+{
+  "placeholderImages": [
+    {
+      "id": "1",
+      "description": "Wikipedia concept illustration",
+      "imageUrl": "https://via.placeholder.com/600x400",
+      "imageHint": "encyclopedia book"
+    },
+    {
+      "id": "2",
+      "description": "Knowledge search illustration",
+      "imageUrl": "https://via.placeholder.com/600x400",
+      "imageHint": "search information"
+    },
+    {
+      "id": "3",
+      "description": "Research reference image",
+      "imageUrl": "https://via.placeholder.com/600x400",
+      "imageHint": "library research"
+    }
+  ]
+}
