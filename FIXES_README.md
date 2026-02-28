@@ -69,5 +69,42 @@ The `dev.nix` file had undergone incremental edits without structural cleanup, l
 - Reduced setup errors for collaborators
 - Improved maintainability
 
+3: Architecture & Security Blueprint Expansion
+
+Commit: dafe946  
+Docs: Expanded blueprint with architecture, security model, and CI considerations
+
+### Issue
+The project documentation lacked:
+- Clear architectural explanation
+- Defined AI tool + flow separation
+- Security model description
+- CI/CD compatibility notes
+- Explicit design principles
+This made the system harder to evaluate, maintain, and scale.
+
+### Root Cause
+Initial documentation focused only on features, without explaining:
+- System architecture
+- Data flow
+- Validation layers
+- Security safeguards
+- Development environment guarantees
+
+### Fix
+- Added structured overview of system architecture
+- Documented Tool + Flow orchestration model
+- Defined data flow lifecycle
+- Formalized security measures (sanitization, schema validation, safe API calls)
+- Added CI/CD compatibility expectations (Node 20, TS checks, linting)
+- Included design principles and future improvement roadmap
+
+### Impact
+- Improved technical clarity for reviewers
+- Demonstrated architectural maturity
+- Increased maintainability
+- Strengthened security and robustness documentation
+- Made system evaluation easier for jury review
+
 
 
