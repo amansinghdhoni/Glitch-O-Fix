@@ -358,6 +358,51 @@ Severe configuration-level corruption and invalid Tailwind schema structure, pre
 - Fixed animation utilities
 - Stabilized frontend styling architecture
 
+12: Rebuilt Corrupted ChatMessage Component with Proper Types, Avatars, and Source Links
+Commit: c5ebd9f  
+Fix: Rebuilt corrupted ChatMessage component with proper types, avatars, and source links
+
+## Issue
+The `chat-message.tsx` component was severely corrupted and contained:
+
+- Invalid import statements (`async function name(params:type)`)
+- Incorrect utility imports (`@/lib/utilities`)
+- Misspelled packages (`lucide-reaction`)
+- Invalid component paths (`avatar-wayofwater`, `chat-container.tsx`)
+- Duplicate and malformed type definitions
+- Broken interface declaration
+- Random injected code (`jakesully`, malformed functions)
+- Incorrect JSX attributes (`classesName` instead of `className`)
+- Missing proper `"use client"` directive placement
+- Improper `sources` typing
+
+## Root Cause
+Severe file-level corruption and invalid TypeScript + JSX structure, breaking the chat message rendering layer.
+
+## Fix
+- Removed all injected and malformed code
+- Restored proper `"use client"` directive
+- Corrected imports:
+  - `lucide-react`
+  - `@/lib/utils`
+  - `@/components/ui/avatar`
+  - `@/components/ui/card`
+- Defined strict `MessageRole` and `Message` types
+- Corrected `sources?: string[]` typing
+- Implemented structured `ChatMessageProps`
+- Fixed conditional layout for user vs assistant messages
+- Properly rendered avatars (User / Bot)
+- Corrected `className` usage
+- Secured external links with `rel="noopener noreferrer"`
+- Styled source badges cleanly and consistently
+
+## Impact
+- Restored chat message rendering
+- Enabled assistant source link display
+- Improved type safety and maintainability
+- Fixed UI structure and layout logic
+- Eliminated runtime and compilation errors
+
 13: Rebuilt Corrupted useIsMobile Hook with Proper Resize Listener and Cleanup
 Commit: ba651c6  
 Fix: Rebuilt corrupted useIsMobile hook with proper resize listener and cleanup
@@ -378,7 +423,7 @@ The `use-mobile.tsx` hook was heavily corrupted and contained:
 ## Root Cause
 Severe corruption of hook logic and misuse of browser APIs, breaking lifecycle management and responsive detection.
 
-### Fix
+## Fix
 - Corrected React import
 - Defined `MOBILE_BREAKPOINT = 768`
 - Properly implemented `useIsMobile` hook
@@ -389,11 +434,12 @@ Severe corruption of hook logic and misuse of browser APIs, breaking lifecycle m
 - Implemented proper cleanup with `removeEventListener`
 - Returned stable boolean value
 
-### Impact
+## Impact
 - Restored mobile breakpoint detection
 - Prevented memory leaks
 - Stabilized responsive UI behavior
 - Eliminated runtime and compilation errors
 - Improved hook lifecycle correctness
+
 
 
