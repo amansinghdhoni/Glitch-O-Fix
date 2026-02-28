@@ -41,7 +41,7 @@ The flow had undergone partial refactoring but was not fully aligned with:
 Commit: 33864d8  
 Chore: Cleaned and stabilized dev.nix configuration for consistent Node 20 environment
 
-### Issue
+## Issue
 The development environment configuration was inconsistent and partially duplicated:
 - Repeated declarations
 - Unstructured package definitions
@@ -74,7 +74,7 @@ The `dev.nix` file had undergone incremental edits without structural cleanup, l
 Commit: dafe946  
 Docs: Expanded blueprint with architecture, security model, and CI considerations
 
-### Issue
+## Issue
 The project documentation lacked:
 - Clear architectural explanation
 - Defined AI tool + flow separation
@@ -83,7 +83,7 @@ The project documentation lacked:
 - Explicit design principles
 This made the system harder to evaluate, maintain, and scale.
 
-### Root Cause
+## Root Cause
 Initial documentation focused only on features, without explaining:
 - System architecture
 - Data flow
@@ -91,7 +91,7 @@ Initial documentation focused only on features, without explaining:
 - Security safeguards
 - Development environment guarantees
 
-### Fix
+## Fix
 - Added structured overview of system architecture
 - Documented Tool + Flow orchestration model
 - Defined data flow lifecycle
@@ -99,7 +99,7 @@ Initial documentation focused only on features, without explaining:
 - Added CI/CD compatibility expectations (Node 20, TS checks, linting)
 - Included design principles and future improvement roadmap
 
-### Impact
+## Impact
 - Improved technical clarity for reviewers
 - Demonstrated architectural maturity
 - Increased maintainability
@@ -110,7 +110,7 @@ Initial documentation focused only on features, without explaining:
 Commit: 34d99dd  
 Fix: Removed malicious placeholder imports and properly registered AI flows for development
 
-### Issue
+## Issue
 The development entry file (`dev.ts`) contained:
 - Malicious/invalid placeholder imports
 - Non-existent module references
@@ -123,16 +123,16 @@ This caused:
 - Potential security risks
 - AI flows not being properly initialized
 
-### Root Cause
+## Root Cause
 The file included corrupted placeholder code and incomplete development setup, likely from scaffolding or injected mock references.
 
-### Fix
+## Fix
 - Removed malicious and invalid import statements
 - Eliminated unused dependencies
 - Properly imported and registered the Wikipedia flow
 - Added environment variable validation warning for `OPENAI_API_KEY`
 
-### Impact
+## Impact
 - Restored stable development entry point
 - Eliminated module resolution errors
 - Improved security posture
@@ -176,6 +176,36 @@ Misconfigured Genkit setup with:
 - Strengthened environment-based security
 - Ensured compatibility with Google GenAI plugin
 
+6: Corrected Tailwind Layer Syntax & Dark Mode Selector
+Commit: 5ac93d1  
+Fix: Corrected Tailwind layer syntax and invalid dark mode selector
+
+## Issue
+The global stylesheet (`globals.css`) contained:
+- Invalid dark mode selector (`.dark force`)
+- Incorrect `@layer base` block syntax
+- Misplaced curly braces
+
+This caused:
+- Tailwind compilation errors
+- Broken dark mode styling
+- Potential build failures
+- Unpredictable UI rendering
+
+## Root Cause
+CSS syntax corruption and incorrect Tailwind layer usage resulted in invalid stylesheet parsing.
+
+## Fix
+- Removed invalid `.dark force` selector
+- Corrected `.dark` class definition
+- Fixed `@layer base` syntax
+- Properly structured CSS blocks and braces
+
+## Impact
+- Restored Tailwind compilation
+- Enabled proper dark mode behavior
+- Prevented UI rendering inconsistencies
+- Improved frontend stability
 
 
 
