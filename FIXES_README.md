@@ -106,5 +106,37 @@ Initial documentation focused only on features, without explaining:
 - Strengthened security and robustness documentation
 - Made system evaluation easier for jury review
 
+4: Removal of Malicious/Invalid Imports & Proper Flow Registration
+Commit: 34d99dd  
+Fix: Removed malicious placeholder imports and properly registered AI flows for development
+
+### Issue
+The development entry file (`dev.ts`) contained:
+- Malicious/invalid placeholder imports
+- Non-existent module references
+- Unnecessary Zod import
+- Unregistered AI flows
+
+This caused:
+- Runtime failures
+- Module resolution errors
+- Potential security risks
+- AI flows not being properly initialized
+
+### Root Cause
+The file included corrupted placeholder code and incomplete development setup, likely from scaffolding or injected mock references.
+
+### Fix
+- Removed malicious and invalid import statements
+- Eliminated unused dependencies
+- Properly imported and registered the Wikipedia flow
+- Added environment variable validation warning for `OPENAI_API_KEY`
+
+### Impact
+- Restored stable development entry point
+- Eliminated module resolution errors
+- Improved security posture
+- Ensured AI flows are correctly initialized during development
+
 
 
