@@ -38,25 +38,33 @@ const wikipediaSearchTool = ai.defineTool(
   },
   async ({ query }) => {
     try {
-      // Basic sanitization to reduce injection attempts
-      const sanitizedQuery = query.replace(/(ignore|override|system:)/gi, '');
+      // 1. ADVANCED SANITIZATION (Added to handle typos and question phrasing)
+      // Remove punctuation and phrases like "who is", "what is" to focus on the keyword
+      const cleanQuery = query
+        .replace(/[?.,]/g, '')
+        .replace(/^(who|what|where|when) (is|was|are|were) /i, '')
+        .trim();
 
-      const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(
-        sanitizedQuery
-      )}&srlimit=3&origin=*`;
+      // 2. SWITCH TO OPENSEARCH API (This fixes the "whwo" typo issue)
+      // OpenSearch handles fuzzy matching and suggestions much better than standard search
+      const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(
+        cleanQuery
+      )}&limit=3&namespace=0&format=json&origin=*`;
 
       const searchResponse = await fetch(searchUrl);
       if (!searchResponse.ok) return [];
 
       const searchData: any = await searchResponse.json();
 
-      if (!searchData?.query?.search?.length) return [];
+      // OpenSearch response format: [ searchTerm, [titles], [descriptions], [urls] ]
+      const titles = searchData[1];
+
+      if (!titles || titles.length === 0) return [];
 
       const results: z.infer<typeof WikipediaSearchToolOutputSchema> = [];
 
-      for (const result of searchData.query.search) {
-        const title = result.title;
-
+      // 3. FETCH EXTRACTS FOR FOUND TITLES (Preserved your existing logic structure)
+      for (const title of titles) {
         const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=true&format=json&titles=${encodeURIComponent(
           title
         )}&origin=*`;
@@ -71,6 +79,9 @@ const wikipediaSearchTool = ai.defineTool(
           const pageId = Object.keys(extractData.query.pages)[0];
           extract = extractData.query.pages[pageId]?.extract || '';
         }
+
+        // If extract is empty or just "refer to...", skip it or provide a default
+        if (!extract) continue;
 
         results.push({
           title,
@@ -121,7 +132,7 @@ const answerQuestionWithWikipediaFlow = ai.defineFlow(
 
     if (!articles.length) {
       return {
-        answer: 'No relevant Wikipedia articles found.',
+        answer: `I couldn't find any articles matching that request. It's possible the spelling was too far off, or the topic isn't on Wikipedia.`,
         sources: [],
       };
     }

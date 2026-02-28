@@ -1,115 +1,23 @@
 'use client';
 
-import { useState } from 'react';
-import { answerQuestionWithWikipedia } from '@/ai/flows/answer-question-with-wikipedia';
-
-type Message = {
-  role: 'user' | 'assistant';
-  content: string;
-  sources?: string[];
-};
+// We import the ChatContainer which now handles the logic (state, API calls)
+// This keeps this file clean and focused on the visual layout.
+import ChatContainer from '@/components/wiki-agent/chat-container';
 
 export default function HomePage() {
-  const [question, setQuestion] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const handleAsk = async () => {
-    if (!question.trim()) return;
-
-    const userMessage: Message = {
-      role: 'user',
-      content: question,
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setLoading(true);
-
-    try {
-      const result = await answerQuestionWithWikipedia({ question });
-
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: result.answer,
-        sources: result.sources,
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: 'Something went wrong while fetching the answer.',
-        },
-      ]);
-    }
-
-    setQuestion('');
-    setLoading(false);
-  };
-
   return (
-    <main className="min-h-screen flex flex-col items-center p-6 bg-background">
-      <h1 className="text-3xl font-bold mb-6 text-primary">
-        WikiAgent
-      </h1>
+    // 1. MAIN CONTAINER: Sets the full-screen gradient background
+    <main className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-100 p-4 md:p-8">
+      
+      {/* 2. BACKGROUND DECOR: Adds subtle glowing orbs (Perplexity/Gemini style) */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-200/20 blur-[100px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-200/20 blur-[100px]" />
+      </div>
 
-      <div className="w-full max-w-2xl space-y-4">
-
-        {/* Chat Messages */}
-        <div className="space-y-4 max-h-[400px] overflow-y-auto p-4 bg-card rounded-xl shadow">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`p-3 rounded-lg ${
-                msg.role === 'user'
-                  ? 'bg-secondary text-secondary-foreground'
-                  : 'bg-primary text-primary-foreground'
-              }`}
-            >
-              <p>{msg.content}</p>
-
-              {msg.sources && msg.sources.length > 0 && (
-                <div className="mt-2 text-sm">
-                  <p className="font-semibold">Sources:</p>
-                  <ul className="list-disc list-inside">
-                    {msg.sources.map((url, i) => (
-                      <li key={i}>
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          {url}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Input Section */}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ask a question about anything..."
-            className="flex-1 p-2 rounded-lg border border-input"
-          />
-          <button
-            onClick={handleAsk}
-            disabled={loading}
-            className="px-4 py-2 bg-accent text-accent-foreground rounded-lg"
-          >
-            {loading ? 'Thinking...' : 'Ask'}
-          </button>
-        </div>
+      {/* 3. CONTENT WRAPPER: Centers the chat interface */}
+      <div className="z-10 w-full max-w-5xl">
+        <ChatContainer />
       </div>
     </main>
   );

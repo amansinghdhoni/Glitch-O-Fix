@@ -1,32 +1,32 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { cn } from '@/lib/utils'; // Ensure you have this utility
 
-/**
- * Load Inter font properly using Next.js font optimization
- */
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-body',
+  variable: '--font-sans', // CHANGED: Standard naming for Shadcn/Tailwind
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'WikiAgent - AI-Powered Wikipedia Assistant',
-  description: 'Factual answers powered by Wikipedia and GenAI',
+  title: 'WikiAgent',
+  description: 'AI-Powered Wikipedia Search Engine',
 };
 
-/**
- * Root Layout Component
- */
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-body antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body 
+        className={cn(
+          "min-h-screen bg-slate-50 font-sans antialiased text-slate-900", // Light professional background
+          inter.variable
+        )}
+      >
         {children}
       </body>
     </html>
