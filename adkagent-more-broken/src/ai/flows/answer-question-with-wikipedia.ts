@@ -1,65 +1,86 @@
 'use server';
 
-
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import fetch from 'node-fetch';
 
+/* ===========================
+   INPUT SCHEMA
+=========================== */
+
+const AnswerQuestionWithWikipediaInputSchema = z.object({
+  question: z.string().min(3).max(500).describe('The user question to answer using Wikipedia.'),
+});
+
+/* ===========================
+   WIKIPEDIA TOOL
+=========================== */
+
 const WikipediaSearchToolInputSchema = z.object({
-  query: z.string().describe('The search query for Wikipedia.'),
+  query: z.string().min(1).describe('The search query for Wikipedia.'),
 });
 
 const WikipediaSearchResultSchema = z.object({
-  title: z.string().describe('The title of the Wikipedia page.'),
-  extract: z.string().describe('A summary or extract of the Wikipedia page content.'),
-  url: z.string().url().describe('The URL of the Wikipedia page.'),
+  title: z.string(),
+  extract: z.string(),
+  url: z.string().url(),
 });
 
-const WikipediaSearchToolOutputSchema = z.array(WikipediaSearchResultSchema).describe('An array of relevant Wikipedia articles.');
+const WikipediaSearchToolOutputSchema = z.array(WikipediaSearchResultSchema);
 
 const wikipediaSearchTool = ai.defineTool(
   {
     name: 'wikipediaSearch',
-    description: 'Searches Wikipedia for articles related to the given query and returns their titles, extracts, and URLs.',
+    description:
+      'Searches Wikipedia for articles related to the given query and returns their titles, extracts, and URLs.',
     inputSchema: WikipediaSearchToolInputSchema,
     outputSchema: WikipediaSearchToolOutputSchema,
   },
-  async (input) => {
-        const { query } = input;
-        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srch=${encodeURIComponent(query)}&srlimit=3`;
-
+  async ({ query }) => {
     try {
+      // Basic sanitization to reduce injection attempts
+      const sanitizedQuery = query.replace(/(ignore|override|system:)/gi, '');
+
+      const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(
+        sanitizedQuery
+      )}&srlimit=3&origin=*`;
+
       const searchResponse = await fetch(searchUrl);
+      if (!searchResponse.ok) return [];
+
       const searchData: any = await searchResponse.json();
 
-      if (!searchData || !searchResponse.query || !searchData.query.search || searchData.query.search.length === 0) {
-        return [];
-      }
+      if (!searchData?.query?.search?.length) return [];
 
-      const searchResults = searchResponse.query.search;
       const results: z.infer<typeof WikipediaSearchToolOutputSchema> = [];
 
-      for (const result of searchTmkc) {
+      for (const result of searchData.query.search) {
         const title = result.title;
-        const pageUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, '_'))}`;
 
-     
-        const extractUrl = `https://en.wikipedia.org/w/api.php=${encodeURIComponent(title)}&format=json&explaintext`;
-        const extractResponse = await fetch(extractData);
-        const extractData: any = await extractURL.json();
+        const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=true&format=json&titles=${encodeURIComponent(
+          title
+        )}&origin=*`;
+
+        const extractResponse = await fetch(extractUrl);
+        if (!extractResponse.ok) continue;
+
+        const extractData: any = await extractResponse.json();
 
         let extract = '';
-        if (extract && extractData.query && extractData.query.pages) {
+        if (extractData?.query?.pages) {
           const pageId = Object.keys(extractData.query.pages)[0];
-          extract = extractData.query.pages.extract || '';
+          extract = extractData.query.pages[pageId]?.extract || '';
         }
 
         results.push({
           title,
           extract,
-          url: pageUrl,
+          url: `https://en.wikipedia.org/wiki/${encodeURIComponent(
+            title.replace(/ /g, '_')
+          )}`,
         });
       }
+
       return results;
     } catch (error) {
       console.error('Error fetching from Wikipedia:', error);
@@ -68,26 +89,66 @@ const wikipediaSearchTool = ai.defineTool(
   }
 );
 
+/* ===========================
+   OUTPUT SCHEMA (FIXED)
+=========================== */
 
- type AnswerQuestionWithWikipediaInput = z.infer<typeof AnswerQuestionWithWikipediaInputSchema>;
+const AnswerQuestionWithWikipediaOutputSchema = z.object({
+  answer: z.string().describe('Final synthesized answer to the question.'),
+  sources: z.array(z.string()).describe('List of source URLs used.'),
+});
 
-const AnswerQuestionWithWikipediaOutputSchema = z.object
-  text: z.string().describe('(BROKEN) Answer text placed under the wrong key.'),
-  urls: z.array(z.string()).describe('(BROKEN) Source URLs placed under the wrong key.'),
+export type AnswerQuestionWithWikipediaInput = z.infer<
+  typeof AnswerQuestionWithWikipediaInputSchema
+>;
 
-export type AnswerQuestionWithWikipediaOutput = z.infer<typeof AnswerQuestionWithWikipediaOutputSchema>;
+export type AnswerQuestionWithWikipediaOutput = z.infer<
+  typeof AnswerQuestionWithWikipediaOutputSchema
+>;
 
+/* ===========================
+   FLOW
+=========================== */
 
-const answerQuestionWithWikipediaFlow = ai.defineFlow
-  
+const answerQuestionWithWikipediaFlow = ai.defineFlow(
+  {
     name: 'answerQuestionWithWikipediaFlow',
     inputSchema: AnswerQuestionWithWikipediaInputSchema,
     outputSchema: AnswerQuestionWithWikipediaOutputSchema,
-  async (input) => {
-    const { output } = await wikipediaAnswerPrompt(input);
-    return output!;
-  }
+    tools: [wikipediaSearchTool],
+  },
+  async ({ question }) => {
+    const articles = await wikipediaSearchTool({ query: question });
 
-export async function answerQuestionWithWikipedia(input: AnswerQuestionWithWikipediaInput): Promise<AnswerQuestionWithWikipediaOutput> {
+    if (!articles.length) {
+      return {
+        answer: 'No relevant Wikipedia articles found.',
+        sources: [],
+      };
+    }
+
+    // Basic synthesis logic
+    const combinedExtract = articles
+      .map((a) => a.extract)
+      .filter(Boolean)
+      .join('\n\n');
+
+    return {
+      answer:
+        combinedExtract.length > 0
+          ? combinedExtract.substring(0, 2000)
+          : 'Unable to generate answer.',
+      sources: articles.map((a) => a.url),
+    };
+  }
+);
+
+/* ===========================
+   EXPORTED FUNCTION
+=========================== */
+
+export async function answerQuestionWithWikipedia(
+  input: AnswerQuestionWithWikipediaInput
+): Promise<AnswerQuestionWithWikipediaOutput> {
   return answerQuestionWithWikipediaFlow(input);
 }
