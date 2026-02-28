@@ -515,4 +515,41 @@ Lack of explicit typing for JSON import structure and inconsistent naming standa
 - Reduced risk of structural runtime errors
 - Enhanced maintainability and readability
 
+16: Corrected clsx and tailwind-merge Utility for Proper Class Merging
+Commit: 340aa89  
+Fix: Correct clsx and tailwind-merge utility for proper class merging
+
+## Issue
+The `utils.ts` file had multiple critical errors:
+
+- Incorrect import names (`clisx`, `twaMerge`)
+- Wrong type usage (`ClassesValue` instead of `ClassValue`)
+- Improper usage of `clsx(inputs)` instead of `clsx(...inputs)`
+- Incorrect merge function name (`twaMerge` instead of `twMerge`)
+
+## Root Cause
+Manual corruption and incorrect utility wiring between:
+- `clsx` (conditional class builder)
+- `tailwind-merge` (Tailwind conflict resolver)
+
+Improper understanding of function signatures and TypeScript types resulted in incorrect usage.
+
+## Fix
+- Corrected imports to:
+  - `clsx`
+  - `ClassValue`
+  - `twMerge`
+- Fixed function signature to:
+  `cn(...inputs: ClassValue[])`
+- Corrected spread usage:
+  `clsx(...inputs)`
+- Ensured proper merge pipeline:
+  `twMerge(clsx(...inputs))`
+
+## Impact
+- Restored proper Tailwind class conflict resolution
+- Fixed conditional class behavior
+- Stabilized UI styling system-wide
+- Improved TypeScript type safety
+- Prevented subtle styling bugs across all components
 
