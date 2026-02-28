@@ -115,7 +115,6 @@ const answerQuestionWithWikipediaFlow = ai.defineFlow(
     name: 'answerQuestionWithWikipediaFlow',
     inputSchema: AnswerQuestionWithWikipediaInputSchema,
     outputSchema: AnswerQuestionWithWikipediaOutputSchema,
-    tools: [wikipediaSearchTool],
   },
   async ({ question }) => {
     const articles = await wikipediaSearchTool({ query: question });

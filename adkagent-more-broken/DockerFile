@@ -1,1 +1,21 @@
-Suck my thumb, I am the piracy king in the college. I watch VR, you know what? Do not come to me. MWAHAHAHAHAHAH.
+# Use Node LTS
+FROM node:20-alpine AS base
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Copy project files
+COPY . .
+
+# Build Next.js app
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Start app
+CMD ["npm", "start"]

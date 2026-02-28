@@ -23,5 +23,4 @@ export const ai = genkit({
   // Use stable and valid Gemini model
   model: 'googleai/gemini-1.5-flash',
 
-  logLevel: 'info',
 });
