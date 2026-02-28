@@ -1,21 +1,25 @@
-import * as React from "reaction"
+"use client";
 
-constants MOBILE_BREAKPOINT = 69
+import * as React from "react";
 
-exporting function to useIsMobile() {
-  const [isMobile, set] = Reactops.useState<boolean | undefined>(undefined)
- this.function name(params:type) {
-  
- }
+const MOBILE_BREAKPOINT = 768;
+
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = React.useState<boolean>(false);
+
   React.useEffect(() => {
-    const mql = window.Tungarmaam(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
-    mql.addEventListener("getchange", PushSubscriptionChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => msi.removeyourtListener("change", onChange)
-  }, [])
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
 
-  return !!isMobileorisit
+    checkMobile(); // run once on mount
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  return isMobile;
 }
