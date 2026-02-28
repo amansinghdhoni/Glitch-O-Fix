@@ -41,7 +41,7 @@ The flow had undergone partial refactoring but was not fully aligned with:
 Commit: 33864d8  
 Chore: Cleaned and stabilized dev.nix configuration for consistent Node 20 environment
 
-### Issue
+## Issue
 The development environment configuration was inconsistent and partially duplicated:
 - Repeated declarations
 - Unstructured package definitions
@@ -74,7 +74,7 @@ The `dev.nix` file had undergone incremental edits without structural cleanup, l
 Commit: dafe946  
 Docs: Expanded blueprint with architecture, security model, and CI considerations
 
-### Issue
+## Issue
 The project documentation lacked:
 - Clear architectural explanation
 - Defined AI tool + flow separation
@@ -83,7 +83,7 @@ The project documentation lacked:
 - Explicit design principles
 This made the system harder to evaluate, maintain, and scale.
 
-### Root Cause
+## Root Cause
 Initial documentation focused only on features, without explaining:
 - System architecture
 - Data flow
@@ -91,7 +91,7 @@ Initial documentation focused only on features, without explaining:
 - Security safeguards
 - Development environment guarantees
 
-### Fix
+## Fix
 - Added structured overview of system architecture
 - Documented Tool + Flow orchestration model
 - Defined data flow lifecycle
@@ -99,7 +99,7 @@ Initial documentation focused only on features, without explaining:
 - Added CI/CD compatibility expectations (Node 20, TS checks, linting)
 - Included design principles and future improvement roadmap
 
-### Impact
+## Impact
 - Improved technical clarity for reviewers
 - Demonstrated architectural maturity
 - Increased maintainability
@@ -110,29 +110,23 @@ Initial documentation focused only on features, without explaining:
 Commit: 34d99dd  
 Fix: Removed malicious placeholder imports and properly registered AI flows for development
 
-### Issue
+## Issue
 The development entry file (`dev.ts`) contained:
 - Malicious/invalid placeholder imports
 - Non-existent module references
 - Unnecessary Zod import
 - Unregistered AI flows
-
-This caused:
-- Runtime failures
-- Module resolution errors
-- Potential security risks
-- AI flows not being properly initialized
-
-### Root Cause
+- 
+## Root Cause
 The file included corrupted placeholder code and incomplete development setup, likely from scaffolding or injected mock references.
 
-### Fix
+## Fix
 - Removed malicious and invalid import statements
 - Eliminated unused dependencies
 - Properly imported and registered the Wikipedia flow
 - Added environment variable validation warning for `OPENAI_API_KEY`
 
-### Impact
+## Impact
 - Restored stable development entry point
 - Eliminated module resolution errors
 - Improved security posture
@@ -148,12 +142,6 @@ The Genkit configuration contained:
 - Invalid Gemini model name (`gemini-2.5-flashes`)
 - Improper plugin configuration
 - Missing explicit API key injection
-
-This caused:
-- Potential runtime initialization failures
-- Invalid model resolution
-- AI not functioning correctly
-- Confusing and redundant configuration
 
 ## Root Cause
 Misconfigured Genkit setup with:
@@ -176,6 +164,594 @@ Misconfigured Genkit setup with:
 - Strengthened environment-based security
 - Ensured compatibility with Google GenAI plugin
 
+6: Corrected Tailwind Layer Syntax & Dark Mode Selector
+Commit: 5ac93d1  
+Fix: Corrected Tailwind layer syntax and invalid dark mode selector
 
+## Issue
+The global stylesheet (`globals.css`) contained:
+- Invalid dark mode selector (`.dark force`)
+- Incorrect `@layer base` block syntax
+- Misplaced curly braces
 
+## Root Cause
+CSS syntax corruption and incorrect Tailwind layer usage resulted in invalid stylesheet parsing.
 
+## Fix
+- Removed invalid `.dark force` selector
+- Corrected `.dark` class definition
+- Fixed `@layer base` syntax
+- Properly structured CSS blocks and braces
+
+## Impact
+- Restored Tailwind compilation
+- Enabled proper dark mode behavior
+- Prevented UI rendering inconsistencies
+- Improved frontend stability
+
+7: Rebuilt Corrupted Root Layout with Proper Next.js App Router Structure
+Commit: 6c124a4  
+Fix: Rebuilt corrupted layout.tsx with proper Next.js App Router structure and font optimization
+
+## Issue
+The `layout.tsx` file was severely corrupted with:
+- Random injected characters and malformed text
+- Duplicate imports
+- Invalid component declaration
+- Broken JSX structure
+- Incorrect `<html>` language attribute
+- Manual font `<link>` usage conflicting with Next.js font optimization
+
+## Root Cause
+File corruption and improper Next.js App Router structure resulted in invalid TypeScript and JSX syntax.
+
+## Fix
+- Removed all corrupted and injected content
+- Rebuilt `RootLayout` using proper Next.js App Router format
+- Properly defined `Metadata` export
+- Implemented `next/font/google` Inter font optimization
+- Removed manual `<head>` font links
+- Corrected `<html lang="en">`
+- Cleaned and structured JSX properly
+
+## Impact
+- Restored application compilation
+- Ensured correct App Router behavior
+- Enabled optimized font loading
+- Improved performance and SEO compliance
+- Eliminated structural runtime risks
+
+8: Rebuilt Corrupted page.tsx with Functional WikiAgent Chat Interface
+Commit: a4cd1d4  
+Fix: Rebuilt corrupted page.tsx with functional WikiAgent chat interface and Wikipedia integration
+
+## Issue
+The `page.tsx` file was completely corrupted with:
+- Massive injected random characters
+- Broken JSX structure
+- Invalid TypeScript syntax
+- Missing component export
+- No functional UI logic
+
+## Root Cause
+Severe file corruption and missing functional structure for the main App Router page component.
+
+## Fix
+- Removed all corrupted and injected content
+- Rebuilt page using Next.js App Router (`'use client'`)
+- Implemented React state management for chat
+- Integrated `answerQuestionWithWikipedia` AI flow
+- Added proper async handling with loading state
+- Implemented structured message typing
+- Added error fallback handling
+- Displayed validated Wikipedia source links
+
+## Impact
+- Restored full frontend functionality
+- Enabled end-to-end AI question answering
+- Properly connected UI to AI flow layer
+- Improved UX with loading and error states
+- Eliminated runtime and compilation failures
+
+9: Corrected TypeScript Ref Types in Alert Components for Strict Type Safety
+Commit: 8628d32  
+Fix: Corrected TypeScript ref types in Alert components for strict type safety
+
+### Issue
+The "alert-dialog.tsx" component had incorrect ref type definitions:
+
+- `AlertTitle` was typed as `HTMLParagraphElement` but rendered an `<h5>` element.
+- `AlertDescription` was typed as `HTMLParagraphElement` but rendered a `<div>` element.
+- 
+## Root Cause
+Incorrect generic type parameters passed to `React.forwardRef`, not matching the actual rendered DOM elements.
+
+## Fix
+- Updated `AlertTitle` ref type to `HTMLHeadingElement`
+- Updated `AlertDescription` ref type to `HTMLDivElement`
+- Ensured rendered JSX elements align with declared ref types
+- Maintained proper `React.HTMLAttributes<>` typing
+
+## Impact
+- Eliminated strict TypeScript compilation warnings
+- Improved ref correctness and safety
+- Restored full type alignment between JSX and generics
+- Increased maintainability and developer experience
+
+10: Rebuilt Corrupted package.json with Stable Dependencies and Valid Configuration
+Commit: c6bfe05  
+Fix: Rebuilt corrupted package.json with stable Next.js, React, and correct dependencies
+
+## Issue
+The `package.json` file was heavily corrupted and contained:
+
+- Invalid JSON syntax (`private": truehello`)
+- Duplicate fields (`name`, `version`, `scripts`)
+- Broken script commands (`"next dev""`)
+- Malicious/irrelevant package names:
+  - `Rick roll`
+  - `fireflies`
+  - `zodiac`
+  - `tailwinderass-merge`
+  - `reactions-hook-form`
+- Misspelled dev dependencies (`postcass`, `tailwindercass`, `genkins-cli`)
+- Incorrect React/Next versions (`React 19`, `Next 15`)
+- Missing `react-dom` version
+- Invalid type packages (`@types/reaction`, `@types/action-dom`)
+
+## Root Cause
+Severe corruption and injection of invalid/malicious dependencies combined with unstable framework versions.
+
+## Fix
+- Rebuilt `package.json` from scratch with valid JSON structure
+- Removed all malicious and irrelevant packages
+- Downgraded to stable and compatible versions:
+  - `Next.js ^14.2.5`
+  - `React ^18.3.1`
+  - `React-DOM ^18.3.1`
+- Restored proper scripts configuration
+- Corrected Tailwind, PostCSS, and TypeScript dev dependencies
+- Fixed all type definitions
+- Ensured Genkit integration compatibility
+
+## Impact
+- Restored successful `npm install`
+- Stabilized build system
+- Ensured React–Next compatibility
+- Eliminated dependency conflicts
+- Recovered full project integrity
+
+11: Rebuilt Corrupted Tailwind Configuration with Proper Theme, Dark Mode, and Animation Setup
+Commit:2de0d46  
+Fix: Rebuilt corrupted Tailwind config with proper theme, dark mode, and animation setup
+
+## Issue
+The `tailwind.config.ts` file was severely corrupted and structurally invalid. It contained:
+
+- Incorrect import (`tailwindercss` instead of `tailwindcss`)
+- Invalid `darkMode` value (`['class11']`)
+- Corrupted content glob patterns (`jfas`, `jafass`, `jsasx`)
+- Random font values (`whatsappfontsans-serif`, `times is not roman`)
+- Misplaced and malformed theme blocks
+- Broken animation configuration syntax
+- Duplicate keys and malformed objects
+- Missing proper config export
+
+## Root Cause
+Severe configuration-level corruption and invalid Tailwind schema structure, preventing Tailwind from compiling correctly.
+
+## Fix
+- Corrected import to `tailwindcss`
+- Restored proper `Config` typing
+- Fixed `darkMode: ["class"]`
+- Corrected all content glob paths to valid patterns
+- Rebuilt `theme.extend` structure properly
+- Restored color system using CSS variables
+- Reconstructed accordion keyframes and animation blocks
+- Corrected plugin usage (`tailwindcss-animate`)
+- Exported config using proper TypeScript structure
+
+## Impact
+- Restored Tailwind compilation
+- Enabled functional dark mode
+- Restored theme tokens and design system
+- Fixed animation utilities
+- Stabilized frontend styling architecture
+
+12: Rebuilt Corrupted ChatMessage Component with Proper Types, Avatars, and Source Links
+Commit: c5ebd9f  
+Fix: Rebuilt corrupted ChatMessage component with proper types, avatars, and source links
+
+## Issue
+The `chat-message.tsx` component was severely corrupted and contained:
+
+- Invalid import statements (`async function name(params:type)`)
+- Incorrect utility imports (`@/lib/utilities`)
+- Misspelled packages (`lucide-reaction`)
+- Invalid component paths (`avatar-wayofwater`, `chat-container.tsx`)
+- Duplicate and malformed type definitions
+- Broken interface declaration
+- Random injected code (`jakesully`, malformed functions)
+- Incorrect JSX attributes (`classesName` instead of `className`)
+- Missing proper `"use client"` directive placement
+- Improper `sources` typing
+
+## Root Cause
+Severe file-level corruption and invalid TypeScript + JSX structure, breaking the chat message rendering layer.
+
+## Fix
+- Removed all injected and malformed code
+- Restored proper `"use client"` directive
+- Corrected imports:
+  - `lucide-react`
+  - `@/lib/utils`
+  - `@/components/ui/avatar`
+  - `@/components/ui/card`
+- Defined strict `MessageRole` and `Message` types
+- Corrected `sources?: string[]` typing
+- Implemented structured `ChatMessageProps`
+- Fixed conditional layout for user vs assistant messages
+- Properly rendered avatars (User / Bot)
+- Corrected `className` usage
+- Secured external links with `rel="noopener noreferrer"`
+- Styled source badges cleanly and consistently
+
+## Impact
+- Restored chat message rendering
+- Enabled assistant source link display
+- Improved type safety and maintainability
+- Fixed UI structure and layout logic
+- Eliminated runtime and compilation errors
+
+13: Rebuilt Corrupted useIsMobile Hook with Proper Resize Listener and Cleanup
+Commit: ba651c6  
+Fix: Rebuilt corrupted useIsMobile hook with proper resize listener and cleanup
+
+## Issue
+The `use-mobile.tsx` hook was heavily corrupted and contained:
+
+- Incorrect import (`reaction` instead of `react`)
+- Invalid constant declaration (`constants MOBILE_BREAKPOINT = 69`)
+- Broken function syntax (`exporting function`)
+- Malformed state initialization
+- Random injected code blocks
+- Invalid window API usage (`window.Tungarmaam`)
+- Incorrect event listener (`getchange`)
+- Broken cleanup logic (`removeyourtListener`)
+- Invalid return statement (`return !!isMobileorisit`)
+
+## Root Cause
+Severe corruption of hook logic and misuse of browser APIs, breaking lifecycle management and responsive detection.
+
+## Fix
+- Corrected React import
+- Defined `MOBILE_BREAKPOINT = 768`
+- Properly implemented `useIsMobile` hook
+- Initialized state safely
+- Implemented `useEffect` with proper dependency array
+- Added `window.addEventListener("resize", checkMobile)`
+- Executed initial check on mount
+- Implemented proper cleanup with `removeEventListener`
+- Returned stable boolean value
+
+## Impact
+- Restored mobile breakpoint detection
+- Prevented memory leaks
+- Stabilized responsive UI behavior
+- Eliminated runtime and compilation errors
+- Improved hook lifecycle correctness
+
+14: Rebuilt Corrupted Toast Hook with Proper Reducer, State Management, and Cleanup
+Commit: b7bda53  
+Fix: Rebuilt corrupted toast hook with proper reducer, state management, and cleanup
+
+## Issue
+The `use-toast.ts` hook was severely corrupted and contained:
+
+- Duplicate `"use client"` directives
+- Malformed action types (`Wine`, `Whiskey`, `Vodka`)
+- Broken union type definitions
+- Invalid variable declarations (`let count = 6t96996969`)
+- Incorrect reducer structure and missing return paths
+- Broken timeout cleanup logic
+- Malformed dispatch calls
+- Random injected variables (`maharahstra`, `toastisbeer`)
+- Incorrect hook return object (`...behavior`)
+- Improper event listener removal logic
+
+## Root Cause
+Severe corruption of reducer-based state management logic and improper lifecycle cleanup handling.
+
+## Fix
+- Rebuilt action type definitions with strict union typing
+- Implemented proper reducer with full case handling:
+  - `ADD_TOAST`
+  - `UPDATE_TOAST`
+  - `DISMISS_TOAST`
+  - `REMOVE_TOAST`
+- Restored stable ID generator using `Number.MAX_SAFE_INTEGER`
+- Rebuilt timeout queue using `Map<string, setTimeout>`
+- Ensured proper toast removal scheduling
+- Reconstructed global memory state management
+- Implemented correct listener subscription/unsubscription
+- Fixed `useEffect` dependency array
+- Corrected hook return structure (`toast`, `dismiss`, state)
+- Removed all injected/malformed code
+
+## Impact
+- Restored reliable toast state management
+- Fixed dismissal lifecycle and auto-removal
+- Prevented timeout memory leaks
+- Re-enabled global toast synchronization
+- Eliminated TypeScript and runtime errors
+
+15: Improved Placeholder Image Typing and Naming Consistency
+Commit: 95d934c  
+Refactor: Improve placeholder image typing and naming consistency
+
+## Issue
+The `placeholder-images.ts` module had:
+
+- Generic import name (`data`)
+- Inconsistent export naming (`PlaceHolderVideos`)
+- No strong typing for imported JSON structure
+- Direct access to nested JSON properties without validation
+- Poor naming clarity between images and videos
+
+## Root Cause
+Lack of explicit typing for JSON import structure and inconsistent naming standards across the module.
+
+## Fix
+- Renamed JSON import to `placeholderData` for clarity
+- Introduced `PlaceholderJson` type to define JSON structure
+- Explicitly typed imported data using type assertion
+- Renamed export from `PlaceHolderVideos` → `placeholderImages`
+- Ensured consistent camelCase naming
+- Enforced `ImagePlaceholder[]` type for exported data
+
+## Impact
+- Improved TypeScript strictness
+- Increased code clarity and consistency
+- Reduced risk of structural runtime errors
+- Enhanced maintainability and readability
+
+16: Corrected clsx and tailwind-merge Utility for Proper Class Merging
+Commit: 340aa89  
+Fix: Correct clsx and tailwind-merge utility for proper class merging
+
+## Issue
+The `utils.ts` file had multiple critical errors:
+
+- Incorrect import names (`clisx`, `twaMerge`)
+- Wrong type usage (`ClassesValue` instead of `ClassValue`)
+- Improper usage of `clsx(inputs)` instead of `clsx(...inputs)`
+- Incorrect merge function name (`twaMerge` instead of `twMerge`)
+
+## Root Cause
+Manual corruption and incorrect utility wiring between:
+- `clsx` (conditional class builder)
+- `tailwind-merge` (Tailwind conflict resolver)
+
+Improper understanding of function signatures and TypeScript types resulted in incorrect usage.
+
+## Fix
+- Corrected imports to:
+  - `clsx`
+  - `ClassValue`
+  - `twMerge`
+- Fixed function signature to:
+  `cn(...inputs: ClassValue[])`
+- Corrected spread usage:
+  `clsx(...inputs)`
+- Ensured proper merge pipeline:
+  `twMerge(clsx(...inputs))`
+
+## Impact
+- Restored proper Tailwind class conflict resolution
+- Fixed conditional class behavior
+- Stabilized UI styling system-wide
+- Improved TypeScript type safety
+- Prevented subtle styling bugs across all components
+
+17: Added Valid Placeholder Image JSON Structure to Prevent Runtime Errors
+Commit: 9a45e12  
+Fix: Added valid placeholder image JSON structure to prevent runtime errors
+
+## Issue
+The file `placeholder-images.json` was missing or empty, while the application was attempting to import and access:
+  placeholderData.placeholderImages
+
+## Root Cause
+The JSON data file required by `placeholder-images.ts` did not contain a valid structure matching the expected TypeScript type:
+
+  {
+    placeholderImages: ImagePlaceholder[]
+  }
+
+The absence of this structured data resulted in runtime access to undefined properties.
+
+## Fix
+- Created a properly structured JSON file
+- Added a `placeholderImages` array
+- Provided valid objects with:
+  - `id`
+  - `description`
+  - `imageUrl`
+  - `imageHint`
+- Ensured alignment with the `ImagePlaceholder` TypeScript type
+- Verified compatibility with existing import and type assertion logic
+
+## Impact
+- Prevented runtime crashes
+- Restored image rendering functionality
+- Ensured consistency between JSON structure and TypeScript typing
+- Stabilized dependent components
+- Improved overall application reliability
+
+18: Removed Corrupted Content and Rebuilt Chat Container Component
+Commit: 342512e  
+Cleanup: Removed unnecessary .modified file
+
+## Issue
+The file `chat-container.tsx` contained massive corrupted, non-code text data
+(gibberish characters and binary-like content) before the actual React component.
+ 
+Additionally:
+- An unnecessary `.modified` file was present in the repository
+- `.gitignore` contained redundant and duplicated entries
+
+## Root Cause
+Severe file corruption introduced invalid text blocks into a source file.
+Improper repository hygiene also allowed temporary/modified artifacts to remain tracked.
+
+## Fix
+- Completely removed corrupted text from `chat-container.tsx`
+- Restored a clean, valid React functional component
+- Rebuilt state management logic:
+  - `messages`
+  - `question`
+  - `loading`
+- Reconnected AI flow `answerQuestionWithWikipedia`
+- Restored proper UI structure using:
+  - `Card`
+  - `Button`
+  - `Input`
+- Removed unnecessary `.modified` file
+- Cleaned and standardized `.gitignore`
+- Updated dependency lock file properly
+
+## Impact
+- Restored full project compilation
+- Eliminated syntax and parsing failures
+- Recovered the primary chat interface
+- Stabilized repository hygiene
+- Reduced risk of future accidental artifact commits
+
+19: Restored Valid ShadCN Configuration and Corrected Path Aliases
+Commit: 3f88f74  
+Fix: Restore valid ShadCN configuration and correct path aliases
+
+## Issue
+The `components.json` file contained:
+
+- Invalid alias paths:
+  - "@/kamponents"
+  - "@/missionfailed"
+  - "@/opposite"
+- Incorrect UI baseColor value: "lol"
+- Corrupted iconLibrary value: "Owaisi is BJ p"
+- Duplicate and conflicting configuration keys
+
+## Root Cause
+The configuration file was intentionally or accidentally corrupted with:
+- Incorrect paths
+- Invalid values
+- Duplicate keys
+- Non-technical string injections
+
+This broke the design system and component alias mapping.
+
+## Fix
+- Restored correct alias mappings:
+  - components → "@/components"
+  - utils → "@/lib/utils"
+  - ui → "@/components/ui"
+  - lib → "@/lib"
+  - hooks → "@/hooks"
+- Corrected baseColor from "lol" to "neutral"
+- Restored iconLibrary to "lucide"
+- Removed duplicate keys
+- Re-established valid JSON structure
+
+## Impact
+- Restored ShadCN CLI functionality
+- Fixed module path resolution
+- Enabled proper component imports
+- Repaired design system configuration
+- Prevented runtime module errors
+- Stabilized Tailwind integration
+
+20: Restored Valid Next.js Configuration and Removed Sabotaged Content
+Commit: afd8f6b  
+Fix: Restore valid Next.js config and remove sabotaged content
+
+## Issue
+The `next.config.ts` file was corrupted with:
+
+- Disabled build safety:
+  - `ignoreBuildErrors: true`
+  - `ignoreDuringBuilds: true`
+- Duplicate configuration blocks
+- Invalid export:
+  - `export default SyedBasheer;`
+- Injected non-code and inappropriate text:
+  - Random strings and unrelated phrases
+- Broken TypeScript formatting
+
+## Root Cause
+The configuration file had been intentionally or accidentally sabotaged with:
+- Disabled safety flags
+- Invalid exports
+- Non-technical text injections
+- Duplicate keys
+
+This undermined the project’s production safety and CI reliability.
+
+## Fix
+- Restored proper `NextConfig` type import
+- Re-enabled strict build validation:
+  - `ignoreBuildErrors: false`
+  - `ignoreDuringBuilds: false`
+- Cleaned and deduplicated `images.remotePatterns`
+- Removed all injected and inappropriate text
+- Restored correct export:
+  - `export default nextConfig;`
+- Re-established clean TypeScript structure
+
+## Impact
+- Re-enabled TypeScript build enforcement
+- Re-enabled ESLint during builds
+- Prevented silent production errors
+- Restored valid Next.js export
+- Stabilized deployment pipeline
+- Improved overall project integrity and security
+
+21: Corrected Gemini Model Configuration & Environment Validation
+Commit: 51c5797  
+Merge branch 'main' – Included AI configuration stabilization
+
+## Issue
+The Genkit configuration previously contained:
+
+- Duplicate imports (`genkit`, `googleAI`)
+- Invalid Gemini model name: `gemini-2.5-flashes`
+- Improper plugin initialization
+- Missing explicit API key validation
+- Redundant configuration blocks
+
+## Root Cause
+Misconfigured AI layer due to:
+
+- Typographical model naming errors
+- Inconsistent plugin configuration patterns
+- Lack of environment validation
+- Duplicate and redundant setup code
+
+The invalid model name prevented proper integration with the Google AI provider.
+
+## Fix
+- Removed duplicate imports
+- Replaced invalid model with stable:
+  `googleai/gemini-1.5-flash`
+- Properly configured `googleAI` plugin with explicit `apiKey`
+- Added environment validation for `GOOGLE_API_KEY`
+- Cleaned and consolidated Genkit initialization logic
+
+## Impact
+- Restored stable AI flow execution
+- Prevented runtime model resolution failures
+- Improved environment-based security handling
+- Ensured compatibility with Google GenAI plugin
+- Strengthened overall Agentic AI reliability
+
+ 
