@@ -358,4 +358,42 @@ Severe configuration-level corruption and invalid Tailwind schema structure, pre
 - Fixed animation utilities
 - Stabilized frontend styling architecture
 
+13: Rebuilt Corrupted useIsMobile Hook with Proper Resize Listener and Cleanup
+Commit: ba651c6  
+Fix: Rebuilt corrupted useIsMobile hook with proper resize listener and cleanup
+
+## Issue
+The `use-mobile.tsx` hook was heavily corrupted and contained:
+
+- Incorrect import (`reaction` instead of `react`)
+- Invalid constant declaration (`constants MOBILE_BREAKPOINT = 69`)
+- Broken function syntax (`exporting function`)
+- Malformed state initialization
+- Random injected code blocks
+- Invalid window API usage (`window.Tungarmaam`)
+- Incorrect event listener (`getchange`)
+- Broken cleanup logic (`removeyourtListener`)
+- Invalid return statement (`return !!isMobileorisit`)
+
+## Root Cause
+Severe corruption of hook logic and misuse of browser APIs, breaking lifecycle management and responsive detection.
+
+### Fix
+- Corrected React import
+- Defined `MOBILE_BREAKPOINT = 768`
+- Properly implemented `useIsMobile` hook
+- Initialized state safely
+- Implemented `useEffect` with proper dependency array
+- Added `window.addEventListener("resize", checkMobile)`
+- Executed initial check on mount
+- Implemented proper cleanup with `removeEventListener`
+- Returned stable boolean value
+
+### Impact
+- Restored mobile breakpoint detection
+- Prevented memory leaks
+- Stabilized responsive UI behavior
+- Eliminated runtime and compilation errors
+- Improved hook lifecycle correctness
+
 
