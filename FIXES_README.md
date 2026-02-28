@@ -253,4 +253,29 @@ Severe file corruption and missing functional structure for the main App Router 
 - Improved UX with loading and error states
 - Eliminated runtime and compilation failures
 
+9: Corrected TypeScript Ref Types in Alert Components for Strict Type Safety
+Commit: 8628d32  
+Fix: Corrected TypeScript ref types in Alert components for strict type safety
+
+### Issue
+The "alert-dialog.tsx" component had incorrect ref type definitions:
+
+- `AlertTitle` was typed as `HTMLParagraphElement` but rendered an `<h5>` element.
+- `AlertDescription` was typed as `HTMLParagraphElement` but rendered a `<div>` element.
+- 
+## Root Cause
+Incorrect generic type parameters passed to `React.forwardRef`, not matching the actual rendered DOM elements.
+
+## Fix
+- Updated `AlertTitle` ref type to `HTMLHeadingElement`
+- Updated `AlertDescription` ref type to `HTMLDivElement`
+- Ensured rendered JSX elements align with declared ref types
+- Maintained proper `React.HTMLAttributes<>` typing
+
+## Impact
+- Eliminated strict TypeScript compilation warnings
+- Improved ref correctness and safety
+- Restored full type alignment between JSX and generics
+- Increased maintainability and developer experience
+
 
