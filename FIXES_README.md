@@ -116,13 +116,7 @@ The development entry file (`dev.ts`) contained:
 - Non-existent module references
 - Unnecessary Zod import
 - Unregistered AI flows
-
-This caused:
-- Runtime failures
-- Module resolution errors
-- Potential security risks
-- AI flows not being properly initialized
-
+- 
 ## Root Cause
 The file included corrupted placeholder code and incomplete development setup, likely from scaffolding or injected mock references.
 
@@ -148,12 +142,6 @@ The Genkit configuration contained:
 - Invalid Gemini model name (`gemini-2.5-flashes`)
 - Improper plugin configuration
 - Missing explicit API key injection
-
-This caused:
-- Potential runtime initialization failures
-- Invalid model resolution
-- AI not functioning correctly
-- Confusing and redundant configuration
 
 ## Root Cause
 Misconfigured Genkit setup with:
@@ -186,12 +174,6 @@ The global stylesheet (`globals.css`) contained:
 - Incorrect `@layer base` block syntax
 - Misplaced curly braces
 
-This caused:
-- Tailwind compilation errors
-- Broken dark mode styling
-- Potential build failures
-- Unpredictable UI rendering
-
 ## Root Cause
 CSS syntax corruption and incorrect Tailwind layer usage resulted in invalid stylesheet parsing.
 
@@ -207,5 +189,36 @@ CSS syntax corruption and incorrect Tailwind layer usage resulted in invalid sty
 - Prevented UI rendering inconsistencies
 - Improved frontend stability
 
+7: Rebuilt Corrupted Root Layout with Proper Next.js App Router Structure
+Commit: 6c124a4  
+Fix: Rebuilt corrupted layout.tsx with proper Next.js App Router structure and font optimization
+
+## Issue
+The `layout.tsx` file was severely corrupted with:
+- Random injected characters and malformed text
+- Duplicate imports
+- Invalid component declaration
+- Broken JSX structure
+- Incorrect `<html>` language attribute
+- Manual font `<link>` usage conflicting with Next.js font optimization
+
+## Root Cause
+File corruption and improper Next.js App Router structure resulted in invalid TypeScript and JSX syntax.
+
+## Fix
+- Removed all corrupted and injected content
+- Rebuilt `RootLayout` using proper Next.js App Router format
+- Properly defined `Metadata` export
+- Implemented `next/font/google` Inter font optimization
+- Removed manual `<head>` font links
+- Corrected `<html lang="en">`
+- Cleaned and structured JSX properly
+
+## Impact
+- Restored application compilation
+- Ensured correct App Router behavior
+- Enabled optimized font loading
+- Improved performance and SEO compliance
+- Eliminated structural runtime risks
 
 
