@@ -37,4 +37,37 @@ The flow had undergone partial refactoring but was not fully aligned with:
 - Improved robustness and security
 
 
+2: Development Environment Stabilization (dev.nix)
+Commit: 33864d8  
+Chore: Cleaned and stabilized dev.nix configuration for consistent Node 20 environment
+
+### Issue
+The development environment configuration was inconsistent and partially duplicated:
+- Repeated declarations
+- Unstructured package definitions
+- Nested/duplicated preview configuration
+- Minor formatting and structural inconsistencies
+- Unclear separation between dev-only and production context
+
+## Root Cause
+The `dev.nix` file had undergone incremental edits without structural cleanup, leading to:
+- Redundant blocks
+- Improper nesting
+- Configuration drift
+- 
+## Fix
+- Standardized on `stable-24.11` channel
+- Locked Node.js to version 20
+- Cleaned duplicate fields and nesting
+- Simplified Firebase emulator configuration
+- Restructured preview command formatting
+- Removed unnecessary extensions configuration
+
+## Impact
+- Stable and reproducible Node 20 development environment
+- Cleaner configuration structure
+- Reduced setup errors for collaborators
+- Improved maintainability
+
+
 
